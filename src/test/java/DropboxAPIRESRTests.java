@@ -19,7 +19,7 @@ public class DropboxAPIRESRTests {
     @Test
     public void Test1() throws IOException {
         byte[] file = Files.readAllBytes(Paths.get("src/fileToUpload/photo_2020-03-29_12-19-33.jpg"));
-        Response response = RestAssured.given().
+        RestAssured.given().
                 config(RestAssured.config().
                         encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false))).
                 header("Authorization", "Bearer ExvWJJGZqD0AAAAAAAAAATb-W1hz4Nsbm96i32CXt5wF_AEJNsSAF88aRkZbOPYV").
@@ -27,9 +27,8 @@ public class DropboxAPIRESRTests {
                 header("Content-Type", "application/octet-stream").
                 body(file).
                 when().
-                post("https://content.dropboxapi.com/2/files/upload");
+                post("https://content.dropboxapi.com/2/files/upload").then().statusCode(200);
         System.out.println("loaded");
-        Assert.assertEquals(200, response.getStatusCode());
 
     }
 
@@ -54,17 +53,15 @@ public class DropboxAPIRESRTests {
         JSONObject requestBody2 = new JSONObject();
         requestBody2.put("file", id);
         requestBody2.put("actions", new ArrayList());
-        Response response2 = RestAssured.given().
+        RestAssured.given().
                 config(RestAssured.config().
                         encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false))).
                 header("Authorization", "Bearer ExvWJJGZqD0AAAAAAAAAATb-W1hz4Nsbm96i32CXt5wF_AEJNsSAF88aRkZbOPYV").
                 header("Content-Type", "application/json").
                 body(requestBody2.toJSONString()).
                 when().
-                post("https://api.dropboxapi.com/2/sharing/get_file_metadata");
+                post("https://api.dropboxapi.com/2/sharing/get_file_metadata").then().statusCode(200);
         System.out.println("metadata");
-        System.out.println(response2.getBody().asString());
-        Assert.assertEquals(200, response2.getStatusCode());
 
 
     }
@@ -73,16 +70,15 @@ public class DropboxAPIRESRTests {
     public void Test3() {
         JSONObject requestBody = new JSONObject();
         requestBody.put("path", "/my_new_pic.jpg");
-        Response response = RestAssured.given().
+        RestAssured.given().
                 config(RestAssured.config().
                         encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false))).
                 header("Authorization", "Bearer ExvWJJGZqD0AAAAAAAAAATb-W1hz4Nsbm96i32CXt5wF_AEJNsSAF88aRkZbOPYV").
                 header("Content-Type", "application/json").
                 body(requestBody.toJSONString()).
                 when().
-                post("https://api.dropboxapi.com/2/files/delete_v2");
+                post("https://api.dropboxapi.com/2/files/delete_v2").then().statusCode(200);
         System.out.println("deleted");
-        Assert.assertEquals(200, response.getStatusCode());
 
     }
 
